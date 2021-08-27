@@ -1,0 +1,37 @@
+#!/bin/bash
+#SBATCH --time=24:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1 --cpus-per-task=4
+#SBATCH --partition=cpu
+#SBATCH --mem=96G
+#SBATCH --error=../logs/jupyter_cpu.%j.err
+#SBATCH --out=../logs/jupyter_cpu.%j.out
+
+ml PyTorch/1.7.1-fosscuda-2019b-Python-3.7.4 
+ml nodejs
+ml git/2.23.0-GCCcore-9.3.0-nodocs
+
+cd ..
+# source venv/bin/activate
+# echo "PYTHONPATH=$PYTHONPATH"
+# echo "PATH=$PATH"
+# echo "PYTHONHOME=$PYTHONHOME"
+# echo "VIRTUAL_ENV=$VIRTUAL_ENV"
+# cd drchajan
+
+XDG_RUNTIME_DIR=""
+port=$(shuf -i8000-9999 -n1)
+node=$(hostname -s)
+user=$(whoami)
+
+# print tunneling instructions to standard error
+>&2 echo -e "
+MacOS or linux terminal command to create your ssh tunnel:
+ssh -N -L ${port}:${node}:${port} ${user}@login.rci.cvut.cz
+
+Use a Browser on your local machine to go to:
+localhost:${port}  (prefix w/ https:// if using password)
+"
+
+export PYTHONPATH=/home/ullriher/ctk-dataset/src:$PYTHONPATH
+export PATH=/home/ullriher/nodejs-latest/node-v15.14.0:/home/ullriher/venv/bin:${PATH}
+jupyter-lab --no-browser --port=${port} --ip=${node} --notebook-dir=/home/ullriher/ctk-dataset/
