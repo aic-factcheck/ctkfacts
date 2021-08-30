@@ -114,6 +114,7 @@ def expand_collapsed(dataset):
 
 def split(dataset, test_size=.12, validation_size=.12, skip_ids=PREVIOUSLY_USED, leakage_prevention_level="source",
           seed=1234):
+    # TODO: uniform val-test split
     skipped = [datapoint for datapoint in dataset if datapoint["id"] in skip_ids]
     dataset = [datapoint for datapoint in dataset if datapoint["id"] not in skip_ids]
 
