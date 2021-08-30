@@ -97,7 +97,9 @@ def collapse_by(dataset, parameter="source"):
 
 
 def counter(dataset):
-    if "label" in dataset[0]:
+    if isinstance(dataset[0], InputExample):
+        dataset = [LABEL_STR[datapoint.label] for datapoint in dataset]
+    elif "label" in dataset[0]:
         dataset = [datapoint["label"] for datapoint in dataset]
     values = sorted(list(set(dataset)))
     return [(value, dataset.count(value), dataset.count(value) / len(dataset)) for value in values]
