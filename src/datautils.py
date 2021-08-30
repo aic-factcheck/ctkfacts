@@ -14,6 +14,14 @@ PREVIOUSLY_USED = frozenset((4098, 4099, 4102, 7, 2058, 2060, 4110, 4112, 4114, 
 LABEL_NUM = {"SUPPORTS":0, "REFUTES": 1, "NOT ENOUGH INFO":2}
 LABEL_STR = {0: "SUPPORTS", 1: "REFUTES", 2: "NOT ENOUGH INFO"}
 
+def detokenize2(txt):
+    # updated detokenize, most models are not trained with this...
+    txt = txt.replace(" .", ".").replace(" ,", ",").replace(" ?", "?").replace(" :", ":").replace(" ;", ";")
+    txt = txt.replace("`` ", '"').replace(" ''", '"').replace(" '", "'")
+    txt = txt.replace("-LRB- ", "(").replace("-RRB-", ")")
+    txt = txt.replace("( ", "(").replace(" )", ")")
+    return txt
+
 def load_api_export(format="nli", evidence_format="text", simulate_nei_evidence=1, single_evidence=0):
     params = {
         "format": format,
