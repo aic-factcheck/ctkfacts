@@ -60,7 +60,7 @@ def expand_by_evidence(dataset):
     for datapoint in dataset:
         for evidence in datapoint["evidence"]:
             datapoint_expanded = datapoint.copy()
-            datapoint_expanded["label_id"], datapoint["evidence"] = label_id, evidence
+            datapoint_expanded["label_id"], datapoint_expanded["evidence"] = label_id, evidence
             result.append(datapoint_expanded)
         label_id += 1
     return result
