@@ -1,5 +1,6 @@
 import json
 import os
+import pickle
 import random
 import urllib.parse
 import urllib.request
@@ -14,6 +15,7 @@ PREVIOUSLY_USED = frozenset((4098, 4099, 4102, 7, 2058, 2060, 4110, 4112, 4114, 
 LABEL_NUM = {"SUPPORTS":0, "REFUTES": 1, "NOT ENOUGH INFO":2}
 LABEL_STR = {0: "SUPPORTS", 1: "REFUTES", 2: "NOT ENOUGH INFO"}
 
+
 def detokenize2(txt):
     # updated detokenize, most models are not trained with this...
     txt = txt.replace(" .", ".").replace(" ,", ",").replace(" ?", "?").replace(" :", ":").replace(" ;", ";")
@@ -21,6 +23,7 @@ def detokenize2(txt):
     txt = txt.replace("-LRB- ", "(").replace("-RRB-", ")")
     txt = txt.replace("( ", "(").replace(" )", ")")
     return txt
+
 
 def load_api_export(format="nli", evidence_format="text", simulate_nei_evidence=1, single_evidence=0):
     params = {
@@ -135,10 +138,16 @@ def to_examples(dataset, norm="NFC"):
     return [
         InputExample(
             datapoint["id"],
-            [ud.normalize(" ".join(datapoint["evidence"]), norm), ud.normalize(datapoint["claim"])],
+            [ud.normalize(norm, detokenize2(" ".join(datapoint["evidence"]))), ud.normalize(norm, datapoint["claim"])],
             LABEL_NUM[datapoint["label"]])
         for datapoint in dataset
     ]
+
+
+def load_examples_from_pickle(folder):
+    with open(folder+"/trn_examples.p","rb") as trn,open(folder+"/val_examples.p","rb") as val,open(folder+"/tst_examples.p","rb") as tst:
+        return pickle.load(trn), pickle.load(val), pickle.load(tst)
+
 
 #  location = "../export-snapshots/export_08-30-2021_0200am_173.jsonl"
 #  dataset = load_jsonl(location)
