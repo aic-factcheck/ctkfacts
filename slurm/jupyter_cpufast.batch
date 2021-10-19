@@ -34,4 +34,4 @@ localhost:${port}  (prefix w/ https:// if using password)
 
 export PYTHONPATH=/home/ullriher/ctk-dataset/src:$PYTHONPATH
 export PATH=/home/ullriher/nodejs-latest/node-v15.14.0:/home/ullriher/venv/bin:${PATH}
-jupyter-lab --no-browser --port=${port} --ip=${node} --notebook-dir=/home/ullriher/ctk-dataset/
+jupyter-lab --no-browser --port=${port} --ip=${node} --notebook-dir=/home/ullriher/codebase/ctk-dataset/
